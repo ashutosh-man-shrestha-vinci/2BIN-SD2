@@ -13,5 +13,7 @@ public class Test {
 		System.out.println(l.attribuerCasierAvecPatins(42));
 		System.out.println(l.attribuerCasierAvecPatins(44));
 
+
+
 	}
 }
