@@ -1,4 +1,4 @@
-public class Etudiant {
+public class Etudiant  {
 	private final String nom;
 	private int moyenne;
 	public Etudiant(String nom, int moyenne) {
@@ -12,5 +12,6 @@ public class Etudiant {
 	public int getMoyenne() {
 		return moyenne;
 	}
-	
+
+
 }

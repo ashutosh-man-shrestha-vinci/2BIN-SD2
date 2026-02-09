@@ -1,24 +1,25 @@
 import java.time.LocalTime;
-import java.util.ArrayDeque;
-import java.util.HashMap;
+import java.util.*;
 
 import static java.time.temporal.ChronoUnit.MILLIS;
 
 public class LocationPatins {
-	  HashMap<Integer, ArrayDeque<Integer>> patins;
-		HashMap<Integer,LocalTime> locations;
-		HashMap<Integer,Integer> pointureParCasier;
-	public LocationPatins(int[] casiers) {
-		patins = new HashMap<>();
-		locations = new HashMap<>();
-		pointureParCasier = new HashMap<>();
-		for (int i = 0; i < casiers.length; i++) {
-			if(!patins.containsKey(casiers[i])) {
-				patins.put(casiers[i], new ArrayDeque<>());
-			}
-			pointureParCasier.put(i,casiers[i]);
-			patins.get(casiers[i]).add(i);
+	private Map<Integer,Deque<Integer>> mapPointureCasiersDisponibles;
+	private LocalTime[] debutLocations;
+	private int[] casiers;
 
+	public LocationPatins(int[] casiers) {
+		this.casiers = new int[casiers.length];
+		this.debutLocations = new LocalTime[casiers.length];
+		this.mapPointureCasiersDisponibles = new HashMap<Integer,Deque<Integer>>();
+		for(int i = 0; i < casiers.length; i++) {
+			this.casiers[i] = casiers[i];
+			Deque<Integer> file = mapPointureCasiersDisponibles.get(casiers[i]);
+			if(file == null) {
+				file = new ArrayDeque<Integer>();
+				this.mapPointureCasiersDisponibles.put(casiers[i],file);
+			}
+			file.add(i);
 		}
 
 	}
@@ -33,26 +34,25 @@ public class LocationPatins {
 		if (pointure < 33 || pointure > 48)
 			throw new IllegalArgumentException();
 		LocalTime l = LocalTime.now();
-		  if(patins.containsKey(pointure) && !patins.get(pointure).isEmpty()) {
-				int casier = patins.get(pointure).removeFirst();
-				 locations.put(casier, l);
-				 return casier;
-			}
 
-
+		Deque<Integer> file = this.mapPointureCasiersDisponibles.get(pointure);
+		if(file == null||file.isEmpty()) {
 			return -1;
-		//a compl�ter
-
+		}
+		int numCasier = file.poll();
+		this.debutLocations[numCasier] = l;
+		return numCasier;
 	}
 
 	public double libererCasier(int numeroCasier) {
-
-		  LocalTime debut = locations.remove(numeroCasier);
-			int pointure = pointureParCasier.get(numeroCasier);
-			patins.get(pointure).push(numeroCasier);
-			return prix(debut, LocalTime.now());
+		if (numeroCasier < 0|| numeroCasier >= this.casiers.length){
+			throw new IllegalArgumentException();
+		}
+		LocalTime finLocation = LocalTime.now();
+		LocalTime debutLocation = this.debutLocations[numeroCasier];
+		this.mapPointureCasiersDisponibles.get(this.casiers[numeroCasier]).add(numeroCasier);
+		this.debutLocations[numeroCasier] = null;
+		return this.prix(debutLocation,finLocation);
 	}
-
-
 
 }
