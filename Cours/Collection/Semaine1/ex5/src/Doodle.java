@@ -1,10 +1,16 @@
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 public class Doodle {
 	private PlageHoraire[] plages;
-	// a compl�ter
-
+  private SortedMap<PlageHoraire,String> particpantDispo;
 	public Doodle(PlageHoraire... plages) {
 		this.plages = plages;
-		// a compl�ter
+		this.particpantDispo = new TreeMap<>();
 	}
 
 	// ajoute les disponibilit�s d'un participant sous forme d'un tableau de booleen.
@@ -15,6 +21,9 @@ public class Doodle {
 			boolean[] disponibilites) {
 		if (disponibilites.length != plages.length)
 			throw new IllegalArgumentException();
+		for (int i = 0; i < plages.length; i++) {
+			
+		}
 		//a compl�ter
 	}
 	
@@ -23,7 +32,7 @@ public class Doodle {
 	// renvoie faux si le participant n'est pas disponible ou s'il n'a pas rempli le
 	// sondage doodle
 	public boolean estDisponible(String participant, PlageHoraire plage) {
-		return false;
+		return 	particpantDispo.get(plage).add(participant);
 	}
 
 	// renvoie une des plages horaires qui a le maximum de participants pr�vus
